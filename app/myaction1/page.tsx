@@ -2,6 +2,7 @@ export default function ActionForm() {
     // Server Actions. These are executed on the server.
     async function addItem(formData: FormData) {
         'use server'; // This is required for server actions.
+        console.log('サーバあくしょん')
         console.log(formData.get('id'));
     }
 
