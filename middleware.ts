@@ -8,15 +8,19 @@ const redis = new Redis({
     token: process.env.KV_REST_API_TOKEN ?? 'expect redis token'
 });
 
-const ratelimit = new Ratelimit({
-    redis: redis,
-    limiter: Ratelimit.slidingWindow(10, "10 s"),
-});
+// An interval of `10s` and refillRate of 5 will cause a new token to be added every 2 seconds
+const limiter = {
+    'sliding': Ratelimit.slidingWindow(10, "10 s"),
+    'bucket': Ratelimit.tokenBucket(5, "10 s", 10)
+}
 
+const ratelimit = new Ratelimit({
+    redis,
+    limiter: limiter.bucket
+});
 
 export async function middleware(request: NextRequest) {
     const ip = request.ip ?? "127.0.0.1";
-    console.log('middleware', ip);
     const resp = await ratelimit.limit(
         ip
     );
@@ -28,3 +32,4 @@ export async function middleware(request: NextRequest) {
         : new NextResponse("Too many requests", {status: 429});
 }
 
+mdjr5w
