@@ -4,8 +4,8 @@ import {Ratelimit} from "@upstash/ratelimit";
 import {Redis} from "@upstash/redis";
 
 const redis = new Redis({
-    url: process.env.KV_REST_API_URL,
-    token: process.env.KV_REST_API_TOKEN
+    url: process.env.KV_REST_API_URL ?? 'expect redis url',
+    token: process.env.KV_REST_API_TOKEN ?? 'expect redis token'
 });
 
 const ratelimit = new Ratelimit({
