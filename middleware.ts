@@ -15,12 +15,16 @@ const ratelimit = new Ratelimit({
 
 
 export async function middleware(request: NextRequest) {
-    console.log('middleware')
+
     const ip = request.ip ?? "127.0.0.1";
-    const {success, pending, limit, reset, remaining} = await ratelimit.limit(
+    console.log('middleware', ip);
+    const resp = await ratelimit.limit(
         ip
     );
-    return success
+
+    console.log(resp)
+
+    return resp.success
         ? NextResponse.next()
         : NextResponse.redirect(new URL("/blocked", request.url));
 }
