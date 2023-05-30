@@ -10,7 +10,7 @@ const redis = new Redis({
 
 const ratelimit = new Ratelimit({
     redis: redis,
-    limiter: Ratelimit.slidingWindow(5, "10 s"),
+    limiter: Ratelimit.slidingWindow(10, "10 s"),
 });
 
 
@@ -25,6 +25,6 @@ export async function middleware(request: NextRequest) {
 
     return resp.success
         ? NextResponse.next()
-        : NextResponse.redirect(new URL("/blocked", request.url));
+        : new NextResponse("Too many requests", {status: 429});
 }
 
