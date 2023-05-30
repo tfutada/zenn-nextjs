@@ -15,7 +15,6 @@ const ratelimit = new Ratelimit({
 
 
 export async function middleware(request: NextRequest) {
-
     const ip = request.ip ?? "127.0.0.1";
     console.log('middleware', ip);
     const resp = await ratelimit.limit(
