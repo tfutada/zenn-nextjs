@@ -19,7 +19,7 @@ const ratelimit = new Ratelimit({
     limiter: limiter.bucket
 });
 
-export async function middleware(request: NextRequest) {
+export async function __middleware(request: NextRequest) {
     const ip = request.ip ?? "127.0.0.1";
     const resp = await ratelimit.limit(
         ip
@@ -31,5 +31,3 @@ export async function middleware(request: NextRequest) {
         ? NextResponse.next()
         : new NextResponse("Too many requests", {status: 429});
 }
-
-mdjr5w
