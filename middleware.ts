@@ -19,13 +19,13 @@ const ratelimit = new Ratelimit({
     limiter: limiter.bucket
 });
 
-export async function __middleware(request: NextRequest) {
+export async function middleware(request: NextRequest) {
     const ip = request.ip ?? "127.0.0.1";
     const resp = await ratelimit.limit(
         ip
     );
 
-    console.log(resp)
+    console.log(`success: ${resp.success}, remaining: ${resp.remaining}, reset: ${resp.reset}`)
 
     return resp.success
         ? NextResponse.next()
