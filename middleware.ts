@@ -9,25 +9,25 @@ const redis = new Redis({
     token: process.env.REDIS_REST_API_TOKEN ?? 'expect redis token'
 });
 
-const limiter = {
-    'sliding': Ratelimit.slidingWindow(10, "10 s"),
-    'bucket': Ratelimit.tokenBucket(1, "10 s", 20)
-}
-
 const ratelimit = new Ratelimit({
     redis,
-    limiter: limiter.sliding
+    limiter: Ratelimit.slidingWindow(10, "10 s")
 });
 
 export async function middleware(request: NextRequest) {
-    const ip = request.ip ?? "127.0.0.1";
-    const resp = await ratelimit.limit(ip);
+    const key = request.ip ?? "127.0.0.1";
+    const algo = "sliding-window";
 
-    // const resp = await rateLimit(ip, 10, 10); // 10 requests per 60 seconds
+    let resp = {success: false, remaining: 0, reset: 0}
+
+    if (algo === "sliding-window") {
+        resp = await ratelimit.limit(key);
+    } else if (algo === "my-fixed-window") {
+        resp = await rateLimit(key, 10, 10);
+    }
 
     console.log(`success: ${resp.success}, remaining: ${resp.remaining}, reset: ${resp.reset}`)
 
-    return resp.success
-        ? NextResponse.next()
+    return resp.success ? NextResponse.next()
         : new NextResponse("Too many requests", {status: 429});
 }
