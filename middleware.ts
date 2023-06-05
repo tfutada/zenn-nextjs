@@ -20,8 +20,8 @@ export async function middleware(request: NextRequest) {
     // measure elapsed time
     const start = Date.now();
 
-    const resp = await ratelimit.limit(key);
-    // const resp = await rateLimit(key, 10, 10);
+    // const resp = await ratelimit.limit(key);
+    const resp = await rateLimit(key, 10, 10);
 
     const elapsed = Date.now() - start;
     console.log(`elapsed: ${elapsed} ms`)
