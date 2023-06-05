@@ -16,16 +16,9 @@ const ratelimit = new Ratelimit({
 
 export async function middleware(request: NextRequest) {
     const key = request.ip ?? "127.0.0.1";
-    const algo = "my-sliding-window";
 
-    let resp = {success: false, remaining: 0, reset: 0}
-
-    // @ts-ignore
-    if (algo === "sliding-window") {
-        resp = await ratelimit.limit(key);
-    } else {
-        resp = await rateLimit(key, 10, 10);
-    }
+    // const resp = await ratelimit.limit(key);
+    const resp = await rateLimit(key, 10, 10);
 
     console.log(`success: ${resp.success}, remaining: ${resp.remaining}, reset: ${resp.reset}`)
 
