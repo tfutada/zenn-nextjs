@@ -20,6 +20,7 @@ export async function middleware(request: NextRequest) {
 
     let resp = {success: false, remaining: 0, reset: 0}
 
+    // @ts-ignore
     if (algo === "sliding-window") {
         resp = await ratelimit.limit(key);
     } else {
