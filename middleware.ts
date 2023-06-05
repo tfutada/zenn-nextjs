@@ -3,6 +3,7 @@ import type {NextRequest} from 'next/server';
 import {Ratelimit} from "@upstash/ratelimit";
 import {Redis} from "@upstash/redis";
 import {rateLimit} from "@/app/my-ratelimit/sliding-window";
+import LeakyBucket from "@/app/my-ratelimit/leaky-bucket";
 
 const redis = new Redis({
     url: process.env.REDIS_REST_API_URL ?? 'expect redis url',
@@ -21,7 +22,15 @@ export async function middleware(request: NextRequest) {
     const start = Date.now();
 
     // const resp = await ratelimit.limit(key);
-    const resp = await rateLimit(key, 10, 10);
+    // const resp = await rateLimit(key, 10, 10);
+    const bucket = new LeakyBucket(10, 1);
+    const isAllowed = await bucket.increment(key);
+
+    const resp = {
+        success: isAllowed,
+        remaining: 10,
+        reset: 10
+    }
 
     const elapsed = Date.now() - start;
     console.log(`elapsed: ${elapsed} ms`)
