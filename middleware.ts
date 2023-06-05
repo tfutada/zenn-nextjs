@@ -17,11 +17,11 @@ const ratelimit = new Ratelimit({
 export async function middleware(request: NextRequest) {
     const key = request.ip ?? "127.0.0.1";
 
-    // measure elaspsed time
+    // measure elapsed time
     const start = Date.now();
 
-    // const resp = await ratelimit.limit(key);
-    const resp = await rateLimit(key, 10, 10);
+    const resp = await ratelimit.limit(key);
+    // const resp = await rateLimit(key, 10, 10);
 
     const elapsed = Date.now() - start;
     console.log(`elapsed: ${elapsed} ms`)
