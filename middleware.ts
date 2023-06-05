@@ -16,7 +16,7 @@ const ratelimit = new Ratelimit({
 
 export async function middleware(request: NextRequest) {
     const key = request.ip ?? "127.0.0.1";
-    const algo = "sliding-window";
+    const algo = "my-sliding-window";
 
     let resp = {success: false, remaining: 0, reset: 0}
 
