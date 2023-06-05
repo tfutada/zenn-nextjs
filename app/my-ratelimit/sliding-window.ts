@@ -1,9 +1,4 @@
-import {Redis} from "@upstash/redis";
-
-const redis = new Redis({
-    url: process.env.REDIS_REST_API_URL ?? 'expect redis url',
-    token: process.env.REDIS_REST_API_TOKEN ?? 'expect redis token'
-});
+import {kv} from '@vercel/kv';
 
 export async function rateLimit(ip: string, maxRequests: number, windowInSecs: number): Promise<any> {
     const now = Date.now();
@@ -12,16 +7,16 @@ export async function rateLimit(ip: string, maxRequests: number, windowInSecs: n
 
     try {
         // Remove old requests from the list
-        await redis.zremrangebyscore(key, 0, windowStart);
+        await kv.zremrangebyscore(key, 0, windowStart);
 
         // Get the count of requests in the current window
-        const current = await redis.zcount(key, '-inf', '+inf');
+        const current = await kv.zcount(key, '-inf', '+inf');
         let resp = {success: current < maxRequests, remaining: maxRequests - current, reset: windowInSecs};
 
         if (resp.success) {
             // If under the limit, log the request and proceed
-            await redis.zadd(key, {score: now, member: `timestamp:${now}`});
-            await redis.expire(key, windowInSecs);
+            await kv.zadd(key, {score: now, member: `timestamp:${now}`});
+            await kv.expire(key, windowInSecs);
         }
 
         return resp;

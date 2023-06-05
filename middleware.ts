@@ -22,7 +22,7 @@ export async function middleware(request: NextRequest) {
 
     if (algo === "sliding-window") {
         resp = await ratelimit.limit(key);
-    } else if (algo === "my-fixed-window") {
+    } else {
         resp = await rateLimit(key, 10, 10);
     }
 
