@@ -24,13 +24,7 @@ export async function middleware(request: NextRequest) {
     // const resp = await ratelimit.limit(key);
     // const resp = await rateLimit(key, 10, 10);
     const bucket = new LeakyBucket(10, 1);
-    const isAllowed = await bucket.increment(key);
-
-    const resp = {
-        success: isAllowed,
-        remaining: 10,
-        reset: 10
-    }
+    const resp = await bucket.increment(key);
 
     const elapsed = Date.now() - start;
     console.log(`elapsed: ${elapsed} ms`)

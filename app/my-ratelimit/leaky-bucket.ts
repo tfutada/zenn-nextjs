@@ -31,16 +31,20 @@ class LeakyBucket {
         level = Math.max(0, level - delta);
 
         // If the resulting level is less than the capacity, increment the level
-        if (level < this.capacity) {
+        let resp = {
+            success: level < this.capacity,
+            remaining: this.capacity - level,
+            reset: 0
+        };
+
+        if (resp.success) {
             await kv.set(key, {
                 level: level + 1,
                 lastUpdated: currentTime
             });
-            return true;
-        } else {
-            // Bucket is full
-            return false;
         }
+
+        return resp;
     }
 }
 
