@@ -13,7 +13,7 @@ export default function SessionCookie() {
                 .then((res) => res.text())
                 .then((data) => {
                         console.log('data', data)
-                        router.push("/")
+                        router.refresh()
                     }
                 )
         }, []
@@ -21,7 +21,7 @@ export default function SessionCookie() {
 
     return (
         <div>
-            loading...
+            setting cookie...
         </div>
     )
 }
