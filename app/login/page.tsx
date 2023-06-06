@@ -1,11 +1,14 @@
 import {
     LoginButton,
     LogoutButton,
-    ProfileButton,
-    RegisterButton,
 } from "@/app/components/buttons";
+import {getServerSession} from "next-auth/next";
+import {options} from "@/app/options";
 
-export default function Home() {
+export default async function Home() {
+    const session = await getServerSession(options)
+    const user = session?.user
+
     return (
         <main
             style={{
@@ -16,10 +19,9 @@ export default function Home() {
             }}
         >
             <div>
-                <LoginButton/>
-                <RegisterButton/>
-                <LogoutButton/>
-                <ProfileButton/>
+                <div>{`${JSON.stringify(user)}`}</div>
+                {user ? <div>Logged in</div> : <div>Not logged in</div>}
+                {user ? <LogoutButton/> : <LoginButton/>}
             </div>
         </main>
     );
