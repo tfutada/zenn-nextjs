@@ -49,9 +49,3 @@ class LeakyBucket {
 }
 
 export default LeakyBucket;
-
-// Usage
-// const bucket = new LeakyBucket(10, 1);
-// const key = 'some-key';
-// const isAllowed = await bucket.increment(key);
-// console.log(isAllowed);
