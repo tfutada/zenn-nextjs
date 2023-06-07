@@ -10,12 +10,12 @@ const redis = new Redis({
     token: process.env.REDIS_REST_API_TOKEN ?? 'expect redis token'
 });
 
-const cache = new Map(); // must be outside your serverless function handler
+// const cache = new Map(); // must be outside your serverless function handler
 
 const ratelimit = new Ratelimit({
     redis,
     limiter: Ratelimit.slidingWindow(10, "10 s"),
-    ephemeralCache: cache,
+    // ephemeralCache: cache,
 });
 
 export async function middleware(request: NextRequest) {
@@ -33,8 +33,6 @@ export async function middleware(request: NextRequest) {
     console.log(`elapsed: ${elapsed} ms`)
 
     console.log(`success: ${resp.success}, remaining: ${resp.remaining}, reset: ${resp.reset}`)
-
-    console.log(cache)
 
     return resp.success ? NextResponse.next()
         : new NextResponse("Too many requests", {status: 429});
