@@ -25,8 +25,8 @@ export async function middleware(request: NextRequest) {
     const start = Date.now();
 
     // use one of the following three lines.
-    const resp = await ratelimit.limit(key);
-    // const resp = await rateLimit(key, 10, 10);
+    // const resp = await ratelimit.limit(key);
+    const resp = await rateLimit(key, 10, 10);
     // const resp = await new LeakyBucket(5, 1).increment(key);
 
     const elapsed = Date.now() - start;
