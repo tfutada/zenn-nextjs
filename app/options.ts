@@ -42,16 +42,21 @@ export const options: NextAuthOptions = {
         callbacks: {
             jwt: async ({token, user, account, profile, isNewUser}) => {
                 // Add role to the user info in the token right after sign in
-                console.log('in jwt', user)
+                console.log('in jwt', {user, token, account, profile})
+
                 if (user) {
                     token.user = user;
                     const u = user as any
                     token.role = u.role;
                 }
+                if (account) {
+                    token.accessToken = account.access_token
+                }
                 return token;
             },
-            session: ({ session, token }) => {
-                console.log("in session", { session, token });
+            session: ({session, token}) => {
+                console.log("in session", {session, token});
+                token.accessToken
                 return {
                     ...session,
                     user: {
