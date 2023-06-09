@@ -8,10 +8,11 @@ export default withAuth(
     {
         callbacks: {
             // 認可に関する処理。ロールが `admin` ならOK
-            authorized: ({token}) => {
-                console.log('in authorized: ', token)
-                return token?.role === "admin"
-            },
+            // authorized: ({token}) => {
+            //     console.log('in authorized: ', token)
+            //     // return token?.role === "admin"
+            //     return true
+            // },
         },
     }
 )
