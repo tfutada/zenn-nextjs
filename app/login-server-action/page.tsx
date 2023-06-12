@@ -2,7 +2,7 @@ import {getServerSession} from "next-auth/next";
 import {options} from "@/app/options";
 
 export default function ActionForm() {
-    // Server Actions. These are executed on the server.
+    // A Server Action, which is executed on the server.
     async function addItem(formData: FormData) {
         'use server'; // This is required for server actions.
 
