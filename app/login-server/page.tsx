@@ -9,6 +9,7 @@ export default async function Home() {
     const session = await getServerSession(options)
     const user = session?.user
 
+
     return (
         <main
             style={{
