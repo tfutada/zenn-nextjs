@@ -11,9 +11,17 @@ export const options: NextAuthOptions = {
                 clientId: process.env.GITHUB_ID!,
                 clientSecret: process.env.GITHUB_SECRET!,
             }),
+            // https://next-auth.js.org/providers/google
             GoogleProvider({
                 clientId: process.env.GOOGLE_CLIENT_ID!,
-                clientSecret: process.env.GOOGLE_CLIENT_SECRET!
+                clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
+                authorization: {
+                    params: {
+                        prompt: "consent",
+                        access_type: "offline",
+                        response_type: "code"
+                    }
+                }
             }),
             CredentialsProvider({
                     name: "Sign in",
@@ -47,7 +55,7 @@ export const options: NextAuthOptions = {
         callbacks: {
             jwt: async ({token, user, account, profile, isNewUser}) => {
                 // Add role to the user info in the token right after sign in
-                console.log('in jwt', {user, token, account, profile})
+                // console.log('in jwt', {user, token, account, profile})
 
                 if (user) {
                     token.user = user;
@@ -56,11 +64,12 @@ export const options: NextAuthOptions = {
                 }
                 if (account) {
                     token.accessToken = account.access_token
+                    token.refreshToken = account.refresh_token
                 }
                 return token;
             },
             session: ({session, token}) => {
-                console.log("in session", {session, token});
+                // console.log("in session", {session, token});
                 token.accessToken
                 return {
                     ...session,
@@ -68,6 +77,7 @@ export const options: NextAuthOptions = {
                         ...session.user,
                         role: token.role,
                         accessToken: token.accessToken,
+                        refreshToken: token.refreshToken,
                     },
 
                 };
