@@ -66,5 +66,7 @@ export async function middleware(req: NextRequest) {
     if (currency.name) updatedUrl.searchParams.set('name', currency.name)
     if (languages) updatedUrl.searchParams.set('languages', languages)
 
+    console.log("updatedUrl", updatedUrl.toString())
+
     return NextResponse.rewrite(updatedUrl.toString())
 }
