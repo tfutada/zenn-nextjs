@@ -1,8 +1,10 @@
 import {NextRequest, NextResponse} from 'next/server'
-import countries from '@/app/lib/countries.json'
-// run only on homepage
-export const config = {
-    matcher: '/',
+import countriesJson from '@/app/lib/countries.json'
+
+interface GeoInfo {
+    country?: string;
+    city?: string;
+    region?: string;
 }
 
 interface CurrencyDetail {
@@ -10,48 +12,55 @@ interface CurrencyDetail {
     symbol: string;
 }
 
-interface CurrencyInfo {
-    [key: string]: Partial<CurrencyDetail>;
+interface CountryInfo {
+    cca2: string;
+    currencies: {
+        [key: string]: CurrencyDetail;
+    };
+    languages: {
+        [key: string]: string;
+    };
+    flag: string;
+}
+
+const countryInfoList = countriesJson as CountryInfo[];
+
+export const config = {
+    matcher: '/',
 }
 
 export async function middleware(req: NextRequest) {
-    const {nextUrl: url, geo} = req
+    const {nextUrl: url, geo} = req as { nextUrl: URL, geo: GeoInfo }
 
     if (!geo || Object.keys(geo).length === 0) {
-        console.log('no geo')
         return
     }
 
-    console.log(geo)
+    const country = geo.country
+    const city = geo.city
+    const region = geo.region
 
-    const country = geo.country ?? ''
-    const city = geo.city ?? ''
-    const region = geo.region ?? ''
-
-    const countryInfo = countries.find((x) => x.cca2 === country)
+    const countryInfo = country ? countryInfoList.find((x) => x.cca2 === country) : undefined;
 
     let currencyCode = ""
-    let currency: Partial<CurrencyDetail> = {}
-    let languages: string = ""
+    let currency: CurrencyDetail = {name: "", symbol: ""}
+    let languages = ""
 
     if (countryInfo) {
-        const currencies = countryInfo.currencies as unknown as CurrencyInfo;
-
-        const currencyCode = Object.keys(currencies)[0];
-        let currency = currencies[currencyCode]
-
+        const currencies = countryInfo.currencies
+        currencyCode = Object.keys(currencies)[0];
+        currency = currencies[currencyCode];
         languages = Object.values(countryInfo.languages).join(', ');
     }
 
-    url.searchParams.set('country', country)
-    url.searchParams.set('city', city)
-    url.searchParams.set('region', region)
-    url.searchParams.set('currencyCode', currencyCode)
-    url.searchParams.set('currencySymbol', currency?.symbol || '')
-    url.searchParams.set('name', currency?.name || '')
-    url.searchParams.set('languages', languages)
+    const updatedUrl = new URL(url);
+    if (country) updatedUrl.searchParams.set('country', country)
+    if (city) updatedUrl.searchParams.set('city', city)
+    if (region) updatedUrl.searchParams.set('region', region)
+    if (currencyCode) updatedUrl.searchParams.set('currencyCode', currencyCode)
+    if (currency.symbol) updatedUrl.searchParams.set('currencySymbol', currency.symbol)
+    if (currency.name) updatedUrl.searchParams.set('name', currency.name)
+    if (languages) updatedUrl.searchParams.set('languages', languages)
 
-    console.log(url.searchParams.toString())
-
-    return NextResponse.rewrite(url)
+    return NextResponse.rewrite(updatedUrl.toString())
 }
