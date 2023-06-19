@@ -23,7 +23,8 @@ interface CountryInfo {
     flag: string;
 }
 
-const countryInfoList = countriesJson as CountryInfo[];
+
+const countryInfoList: any = countriesJson
 
 export const config = {
     matcher: '/',
@@ -33,6 +34,7 @@ export async function middleware(req: NextRequest) {
     const {nextUrl: url, geo} = req as { nextUrl: URL, geo: GeoInfo }
 
     if (!geo || Object.keys(geo).length === 0) {
+        console.log("no geo info")
         return
     }
 
@@ -40,7 +42,7 @@ export async function middleware(req: NextRequest) {
     const city = geo.city
     const region = geo.region
 
-    const countryInfo = country ? countryInfoList.find((x) => x.cca2 === country) : undefined;
+    const countryInfo = country ? countryInfoList.find((x: CountryInfo) => x.cca2 === country) : undefined;
 
     let currencyCode = ""
     let currency: CurrencyDetail = {name: "", symbol: ""}
