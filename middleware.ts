@@ -2,9 +2,9 @@ import {NextRequest, NextResponse} from 'next/server'
 import countriesJson from '@/app/lib/countries.json'
 
 interface GeoInfo {
-    country?: string;
-    city?: string;
-    region?: string;
+    country: string;
+    city: string;
+    region: string;
 }
 
 interface CurrencyDetail {
@@ -42,7 +42,7 @@ export async function middleware(req: NextRequest) {
     const city = geo.city
     const region = geo.region
 
-    const countryInfo = country ? countryInfoList.find((x: CountryInfo) => x.cca2 === country) : undefined;
+    const countryInfo = countryInfoList.find((x: CountryInfo) => x.cca2 === country)
 
     let currencyCode = ""
     let currency: CurrencyDetail = {name: "", symbol: ""}
@@ -56,9 +56,11 @@ export async function middleware(req: NextRequest) {
     }
 
     const updatedUrl = new URL(url);
-    if (country) updatedUrl.searchParams.set('country', country)
-    if (city) updatedUrl.searchParams.set('city', city)
-    if (region) updatedUrl.searchParams.set('region', region)
+
+    updatedUrl.searchParams.set('country', country)
+    updatedUrl.searchParams.set('city', city)
+    updatedUrl.searchParams.set('region', region)
+
     if (currencyCode) updatedUrl.searchParams.set('currencyCode', currencyCode)
     if (currency.symbol) updatedUrl.searchParams.set('currencySymbol', currency.symbol)
     if (currency.name) updatedUrl.searchParams.set('name', currency.name)
