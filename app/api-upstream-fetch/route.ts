@@ -1,6 +1,7 @@
-import {MY_TOKEN} from "@/app/myconst";
+import {unwrap} from "@/app/common";
 
-const upstream_url = process.env.UPSTREAM_URL!;
+
+const upstream_url = unwrap(process.env.UPSTREAM_URL)
 
 export async function GET(request: Request) {
     // fetch an upstream api
