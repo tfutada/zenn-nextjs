@@ -30,7 +30,7 @@ export const config = {
     matcher: '/',
 }
 
-export async function middleware(req: NextRequest) {
+export async function middlewareGeo(req: NextRequest) {
     const {nextUrl: url, geo} = req as { nextUrl: URL, geo: GeoInfo }
 
     if (!geo || Object.keys(geo).length === 0) {
