@@ -56,7 +56,7 @@ export const options: NextAuthOptions = {
         callbacks: {
             jwt: async ({token, user, account, profile, isNewUser}) => {
                 // Add role to the user info in the token right after sign in
-                // console.log('in jwt', {user, token, account, profile})
+                console.log('in jwt', {user, token, account, profile})
 
                 if (user) {
                     token.user = user;
