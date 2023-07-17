@@ -1,9 +1,13 @@
 import {NextRequest} from "next/server";
-import { writeFile } from 'fs/promises'
+import {writeFile} from 'fs/promises'
 
-type FormParams = {
-    name: string
-}
+export const config = {
+    api: {
+        bodyParser: {
+            sizeLimit: '20mb',
+        },
+    },
+};
 
 // We don't need formidable anymore in App Router.
 // https://ethanmick.com/how-to-upload-a-file-in-next-js-13-app-directory/
