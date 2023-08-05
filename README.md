@@ -20,7 +20,7 @@ app/mysession - session management using KV store and Cookie
 echo 'GET http://localhost:3000/api-void' | vegeta attack -rate=2 -duration=60s | tee results.bin | vegeta report
 ```
 
-### next-atuh
+### next-auth
 
 app/api/auth
 app/api-auth - Router Handler
