@@ -3,6 +3,8 @@ import {options} from "@/app/options";
 import {google, calendar_v3} from 'googleapis'
 import Calendar = calendar_v3.Calendar
 
+export const dynamic = "force-dynamic"
+
 
 export default async function Page() {
     const session = await getServerSession(options)
