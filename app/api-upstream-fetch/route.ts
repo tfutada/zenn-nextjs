@@ -20,6 +20,12 @@ export async function GET(request: Request) {
         const json = await res.json();
         console.log(json);
 
+        if (!res.ok) {
+            return new Response('failed at Upstream', {
+                status: res.status,
+            });
+        }
+
         const headers: { [key: string]: string } = {}
         // my_cookie=my_value; Path=/; Max-Age=1687226886; HttpOnly
         const set_cookie = res.headers.get('set-cookie')
