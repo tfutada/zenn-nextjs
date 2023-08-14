@@ -1,6 +1,8 @@
 import {unwrap} from "@/app/common";
 
-export const dynamic = "force-dynamic"
+// this page becomes dynamic as it fails to connect to UPSTREAM_URL at build time
+// ├ λ /api-upstream-fetch                    0 B                0 B
+// export const dynamic = "force-dynamic"
 
 
 const upstream_url = unwrap(process.env.UPSTREAM_URL)
