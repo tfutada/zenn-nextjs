@@ -1,13 +1,14 @@
 import {NextRequest} from "next/server";
 import {writeFile} from 'fs/promises'
 
-export const config = {
-    api: {
-        bodyParser: {
-            sizeLimit: '20mb',
-        },
-    },
-};
+// NB: This is not working in App Router, but it works in Page Router.
+// export const config = {
+//     api: {
+//         bodyParser: {
+//             sizeLimit: '20mb',
+//         },
+//     },
+// };
 
 // We don't need formidable anymore in App Router.
 // https://ethanmick.com/how-to-upload-a-file-in-next-js-13-app-directory/

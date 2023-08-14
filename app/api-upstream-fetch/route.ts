@@ -1,5 +1,7 @@
 import {unwrap} from "@/app/common";
 
+export const dynamic = "force-dynamic"
+
 
 const upstream_url = unwrap(process.env.UPSTREAM_URL)
 
