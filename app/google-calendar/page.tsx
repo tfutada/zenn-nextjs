@@ -9,6 +9,7 @@ export const dynamic = "force-dynamic"
 export default async function Page() {
     const session = await getServerSession(options)
     const user = session?.user
+    user?.accessToken
 
     console.log('Google2', user)
     const oauth2Client = new google.auth.OAuth2({

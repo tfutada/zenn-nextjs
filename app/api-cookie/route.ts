@@ -6,6 +6,7 @@ import {Cart, MY_TOKEN} from "@/app/myconst";
 export async function GET(request: Request) {
     const cookieStore = cookies();
     const token = cookieStore.get(MY_TOKEN);
+    console.log(request.headers.get('cookie'))
 
     const headers: { [key: string]: string } = {}
     if (!token) {
