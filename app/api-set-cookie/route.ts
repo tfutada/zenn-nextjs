@@ -17,7 +17,7 @@ export async function GET(request: NextRequest) {
     // // or
 
     cookies().set('name1', 'lee1')
-    cookies().set('name2', 'lee2', { secure: true, expires: new Date(0) })
+    cookies().set('name2', 'lee2', {httpOnly: true, expires: new Date(0)})
 
     return NextResponse.json({message: "ok"});
 }
