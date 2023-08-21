@@ -1,6 +1,8 @@
 import {kv} from '@vercel/kv';
 import {NextResponse} from 'next/server';
 
+export const dynamic = "force-dynamic"
+
 export async function GET() {
 
     await kv.set(`cart:123`, "abc");
